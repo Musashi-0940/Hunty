@@ -1,4 +1,4 @@
-Hyperium Version 1.0.050
+--Hyperium Version 1.0.050
 
 repeat task.wait() until game:IsLoaded()
 
