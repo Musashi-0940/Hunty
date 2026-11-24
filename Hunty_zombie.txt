@@ -1,4 +1,4 @@
---Hyperium Version 1.0.050
+Hyperium Version 1.0.050
 
 repeat task.wait() until game:IsLoaded()
 
@@ -647,9 +647,7 @@ local function applyFPSBooster(enabled)
                 if BoosterSavedEffects[obj] == nil then BoosterSavedEffects[obj] = obj.Enabled end
                 obj.Enabled = false
             elseif obj:IsA("BasePart") then
-                pcall(function()
-                    obj.CastShadow = false
-                end)
+                pcall(function() obj.CastShadow = false end)
             end
         end
     else
@@ -747,7 +745,7 @@ local function openMiniInspector()
     title.Size = UDim2.new(1, -68, 1, 0)
     title.Position = UDim2.new(0, 10, 0, 0)
     title.BackgroundTransparency = 1
-    title.Text = "Mini Inspector (Drag)"
+    title.Text = "Hyperium Inspector (Drag)"
     title.TextColor3 = Color3.fromRGB(235, 238, 248)
     title.Font = Enum.Font.Code
     title.TextSize = 12
@@ -976,17 +974,16 @@ getgenv().HyperiumCleanup = function()
     end)
 end
 
+local LIB_URL = "[raw.githubusercontent.com](https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua)"
+
 local function loadDrRay()
-    local customUrl = "[gist.githubusercontent.com](https://gist.githubusercontent.com/Mxsashi/0605e9f9a166952e96c0798cdca28ad6/raw/UiLib.Lua)"
-    local fallbackUrl = "[raw.githubusercontent.com](https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua)"
-
-    local ok, lib = pcall(function() return loadstring(game:HttpGet(customUrl))() end)
-    if ok and lib then return lib end
-
-    local ok2, lib2 = pcall(function() return loadstring(game:HttpGet(fallbackUrl))() end)
-    if ok2 and lib2 then return lib2 end
-
-    error("Failed to load DrRay UI Library from both custom Gist and fallback URL.")
+    local ok, lib = pcall(function()
+        return loadstring(game:HttpGet(LIB_URL))()
+    end)
+    if ok and type(lib) == "table" then
+        return lib
+    end
+    error("[Hyperium] UI library failed to load from " .. LIB_URL .. " -> " .. tostring(lib))
 end
 
 local DrRayLibrary = loadDrRay()
@@ -996,7 +993,7 @@ pcall(function()
     HyperiumWindow:SetTheme(Color3.fromRGB(22, 24, 32), Color3.fromRGB(68, 120, 210))
 end)
 
-local mainTab = DrRayLibrary.newTab("Main Farm", "Default")
+local mainTab = DrRayLibrary.newTab("Main Farm", "12140411893")
 
 mainTab.newToggle("Auto-Doors (Priority 1)", "Continuously teleports to open gates across stages", false, function(val)
     State.AutoDoors = val
@@ -1036,14 +1033,14 @@ mainTab.newSlider("Scan Range", "Enemy search radius (100 - 2500)", 2500, false,
     State.ScanRange = math.clamp(num, 100, 2500)
 end)
 
-local combatTab = DrRayLibrary.newTab("Combat", "Default")
+local combatTab = DrRayLibrary.newTab("Combat", "12140411893")
 
 combatTab.newToggle("Auto M1", "Independent M1 attack loop", false, function(val)
     State.AutoM1 = val
 end)
 
 combatTab.newSlider("M1 Delay", "Milliseconds between M1 clicks (100 -> 2)", 100, false, function(num)
-    local ms = math.clamp(100 - num, 2, 1000)
+    local ms = math.clamp(100 - num, 2, 100)
     State.M1Delay = ms
 end)
 
@@ -1057,7 +1054,7 @@ combatTab.newToggle("Only Cast When Target Active", "Pauses skill spam when no e
     State.OnlyCastWithTarget = val
 end)
 
-local raidTab = DrRayLibrary.newTab("Raid", "Default")
+local raidTab = DrRayLibrary.newTab("Raid", "12140411893")
 
 raidTab.newToggle("Auto Spawn-to-Dest", "Teleports from spawn to arena once per match", false, function(val)
     State.RaidAutoTeleport = val
@@ -1071,7 +1068,7 @@ raidTab.newToggle("Auto Vote Replay", "Automatically votes to replay after clear
     State.RaidVoteReplay = val
 end)
 
-local utilTab = DrRayLibrary.newTab("Utilities", "Default")
+local utilTab = DrRayLibrary.newTab("Utilities", "12140411893")
 
 utilTab.newToggle("Anti-AFK", "Prevents idle disconnect (on by default)", true, function(val)
     State.AntiAFK = val
